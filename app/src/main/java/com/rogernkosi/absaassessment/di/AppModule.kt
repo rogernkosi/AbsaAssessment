@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.rogernkosi.absaassessment.commons.Constants.BASE_URL
 import com.rogernkosi.absaassessment.data.remote.ApiClient
+import com.rogernkosi.absaassessment.data.remote.repository.TimelinesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,5 +35,9 @@ object AppModule {
             .build()
             .create(ApiClient::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun providesTimelinesRepository(impl: TimelinesRepositoryImpl) : TimelinesRepositoryImpl = impl
 
 }
