@@ -3,9 +3,12 @@ package com.rogernkosi.absaassessment.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.rogernkosi.absaassessment.databinding.ActivityMainBinding
+import com.rogernkosi.absaassessment.domain.model.RecyclerViewItem
 import com.rogernkosi.absaassessment.domain.model.Weather
 import com.rogernkosi.absaassessment.domain.use_cases.GetTimelinesUseCase
 import com.rogernkosi.absaassessment.ui.timelines.WeatherAdapter
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel.state.observe(this) { state ->
             when (state) {
                 is WeatherState.Error -> {
-                   //show error snack bar with erorr message
+                    showErrorMessage(state.error!!)
                 }
                 WeatherState.Loading -> {
                     // show loading bar
@@ -49,10 +52,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpWeatherList(weather: List<Weather>) {
-        binding.list.adapter = WeatherAdapter(weather)
+        val dataSet = arrayListOf<RecyclerViewItem>()
+
+        val weatherAdapter = WeatherAdapter()
+
+        weather.forEach {
+            dataSet.add(RecyclerViewItem.SectionItem(it.startTime))
+            it.timelines?.forEach { timeLine ->
+                dataSet.add(RecyclerViewItem.ContentItem(timeLine.interval, timeLine.temp))
+            }
+        }
+        dataSet.also { weatherAdapter.data = it }
+
+        binding.list.adapter = weatherAdapter
         binding.list.layoutManager = LinearLayoutManager(baseContext)
         val dividerItemDecoration =
             DividerItemDecoration(baseContext, DividerItemDecoration.VERTICAL)
         binding.list.addItemDecoration(dividerItemDecoration)
+    }
+
+    private fun showErrorMessage(@StringRes error: Int = 0) {
+        Snackbar.make(binding.coordinator, getString(error), Snackbar.LENGTH_SHORT).show()
     }
 }

@@ -12,11 +12,11 @@ import javax.inject.Inject
 
 class TimelinesRepositoryImpl @Inject constructor(private val api: ApiClient) :
     TimelinesRepository {
+
     private var weather = mutableListOf<Weather>()
     private val finalWeather = mutableListOf<Weather>()
 
     override suspend fun getTimelines(): List<Weather> {
-
         val data = api.getWeatherTimelines(
             Constants.LOCATION,
             Constants.FIELDS,
@@ -36,7 +36,7 @@ class TimelinesRepositoryImpl @Inject constructor(private val api: ApiClient) :
             weather.forEachIndexed { i, _weather ->
                 val tmp = mutableListOf<TimeLine>()
 
-                for (interval in  timeline.intervals){
+                for (interval in timeline.intervals) {
                     if (_weather.startTime.regionMatches(0, interval.startTime, 0, 10)) {
                         tmp.add(
                             TimeLine(
