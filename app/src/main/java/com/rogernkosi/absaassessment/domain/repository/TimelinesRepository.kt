@@ -3,5 +3,5 @@ package com.rogernkosi.absaassessment.domain.repository
 import com.rogernkosi.absaassessment.domain.model.Weather
 
 interface TimelinesRepository {
-    suspend fun getTimelines(): Map<String, List<Weather>>
+    suspend fun getTimelines(): List<Weather>
 }
