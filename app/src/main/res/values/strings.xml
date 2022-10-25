@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AbsaAssessment</string>
+
+    <!-- Errors -->
+    <string name="network_failure">Something went wrong, please try again later</string>
+    <string name="connection_failure">Could not connect, please check your connection settings</string>
 </resources>
